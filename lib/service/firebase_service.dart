@@ -3,8 +3,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -18,22 +16,20 @@ class FirebaseService {
 
   Future<ChatUser> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await _googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount!.authentication;
+      final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      final UserCredential authResult =
-          await _auth.signInWithCredential(credential);
+      final UserCredential authResult = await _auth.signInWithCredential(credential);
       final User user = authResult.user!;
       EasyLoading.showInfo(
         "Logging In",
         dismissOnTap: true,
         duration: const Duration(seconds: 1),
       );
+      log("authResult>>> ${authResult.user!.displayName}");
       ChatUser chatUser;
       final checkUser = await checkSignInDetailsToDb(user);
       chatUser = checkUser;
@@ -104,8 +100,7 @@ class FirebaseService {
   static Future<ChatUser?> getUserModelbyId(String uid) async {
     ChatUser? chatUser;
 
-    DocumentSnapshot docsnapshot =
-        await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+    DocumentSnapshot docsnapshot = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
 
     if (docsnapshot.data() != null) {
       chatUser = ChatUser.fromJson(docsnapshot.data() as Map<String, dynamic>);

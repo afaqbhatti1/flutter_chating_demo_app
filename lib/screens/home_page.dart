@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/models/usersmodel.dart';
 import 'package:chat_app/screens/selectusertochat_page.dart';
 import 'package:chat_app/screens/userinfo_page.dart';
 import 'package:chat_app/service/firebase_service.dart';
@@ -9,10 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../service/firebase_service.dart';
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/widgets/listusers_addbutton.dart';
 
+import 'all_users_screen.dart';
 import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,8 +28,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -91,10 +89,7 @@ class _HomePageState extends State<HomePage>
                         ),
                       );
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const LoginPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                     } catch (e) {
                       if (e is FirebaseAuthException) {
                         print(e.message);
@@ -171,7 +166,13 @@ class _HomePageState extends State<HomePage>
                 top: 30,
               ),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                    return UsersScreen(
+                      chatUser: user!,
+                    );
+                  })));
+                },
                 icon: const Icon(
                   Icons.search,
                   size: 36,
@@ -216,9 +217,7 @@ class _HomePageState extends State<HomePage>
             ),
             width: 376,
             height: 65,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-                color: const Color(0xffF3F3F3)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: const Color(0xffF3F3F3)),
             child: TabBar(
               controller: _tabController,
               labelColor: Colors.black,

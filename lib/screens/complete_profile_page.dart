@@ -1,7 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:developer';
 import 'dart:io';
+
+import 'package:chat_app/models/usersmodel.dart';
 import 'package:chat_app/screens/home_page.dart';
+import 'package:chat_app/widgets/login_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,8 +12,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/widgets/login_button.dart';
 
 class CompleteProfile extends StatefulWidget {
   final ChatUser chatUser;
@@ -42,8 +42,8 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     Navigator.pop(context);
                     imageSelect(ImageSource.gallery);
                   },
-                  leading: Icon(Icons.photo_album),
-                  title: Text("Select from gallery"),
+                  leading: const Icon(Icons.photo_album),
+                  title: const Text("Select from gallery"),
                 ),
                 const SizedBox(
                   height: 15,
@@ -53,8 +53,8 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     Navigator.pop(context);
                     imageSelect(ImageSource.camera);
                   },
-                  leading: Icon(Icons.camera_alt),
-                  title: Text("Select from camera"),
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text("Select from camera"),
                 ),
               ],
             ),
@@ -65,13 +65,19 @@ class _CompleteProfileState extends State<CompleteProfile> {
   File? imagefile;
   TextEditingController fullnamecontroller = TextEditingController();
   TextEditingController aboutcontroller = TextEditingController();
+  TextEditingController teacherNamecontroller = TextEditingController();
+  TextEditingController hobbiescontroller = TextEditingController();
+  TextEditingController favBookscontroller = TextEditingController();
 
   void checkValues() {
     String fullname = fullnamecontroller.text.trim();
     String about = aboutcontroller.text.trim();
+    String teacherName = aboutcontroller.text.trim();
+    String hobbies = hobbiescontroller.text.trim();
+    String favBooks = favBookscontroller.text.trim();
 
     if (imagefile != null || fullname != "" || about != "") {
-      uploadData(fullname, about);
+      uploadData(fullname, about, teacherName, hobbies, favBooks);
     } else {
       print("Please Fill all Values");
     }
@@ -80,11 +86,12 @@ class _CompleteProfileState extends State<CompleteProfile> {
   void uploadData(
     String fullname,
     String about,
+    String teacherName,
+    String hobbies,
+    String favBooks,
   ) async {
-    UploadTask uploadTask = FirebaseStorage.instance
-        .ref("profilepics")
-        .child(widget.chatUser.uid.toString())
-        .putFile(imagefile!);
+    UploadTask uploadTask =
+        FirebaseStorage.instance.ref("profilepics").child(widget.chatUser.uid.toString()).putFile(imagefile!);
 
     TaskSnapshot snapshot = await uploadTask;
 
@@ -93,6 +100,9 @@ class _CompleteProfileState extends State<CompleteProfile> {
     widget.chatUser.profilepic = imgUrl;
     widget.chatUser.username = fullname;
     widget.chatUser.about = about;
+    widget.chatUser.techerName = teacherName;
+    widget.chatUser.hobbies = hobbies;
+    widget.chatUser.favBooks = favBooks;
 
     await FirebaseFirestore.instance
         .collection("Users")
@@ -126,7 +136,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     CroppedFile? cropedImage = (await ImageCropper().cropImage(
       sourcePath: file.path,
       compressQuality: 20,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
     ));
 
     if (cropedImage != null) {
@@ -141,7 +151,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Complete Your Profile Info"),
-        backgroundColor: Color(0xff2865DC),
+        backgroundColor: const Color(0xff2865DC),
       ),
       body: SafeArea(
         child: Padding(
@@ -150,57 +160,85 @@ class _CompleteProfileState extends State<CompleteProfile> {
             left: 35,
             right: 35,
           ),
-          child: Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  showPhotoOptions();
-                },
-                child: CircleAvatar(
-                  backgroundImage:
-                      (imagefile != null) ? FileImage(imagefile!) : null,
-                  radius: 60,
-                  child: (imagefile == null) ? const Icon(Icons.person) : null,
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              TextField(
-                controller: fullnamecontroller,
-                decoration: const InputDecoration(
-                  labelText: "Full Name",
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              TextField(
-                controller: aboutcontroller,
-                decoration: const InputDecoration(
-                  labelText: "About Yourself",
-                ),
-              ),
-              const SizedBox(
-                height: 35,
-              ),
-              LoginButton(
-                height: 50,
-                width: 200,
-                buttoncolor: Color(0xff2865DC),
-                radius: 30,
-                onPressed: () {
-                  checkValues();
-                },
-                child: Text(
-                  "Submit",
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    color: Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    showPhotoOptions();
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: (imagefile != null) ? FileImage(imagefile!) : null,
+                    radius: 60,
+                    child: (imagefile == null) ? const Icon(Icons.person) : null,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: fullnamecontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Full Name",
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: aboutcontroller,
+                  decoration: const InputDecoration(
+                    labelText: "About Yourself",
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: teacherNamecontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Teacher Name",
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: hobbiescontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Hobbies",
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                TextField(
+                  controller: favBookscontroller,
+                  decoration: const InputDecoration(
+                    labelText: "Favourite Books ",
+                  ),
+                ),
+                const SizedBox(
+                  height: 35,
+                ),
+                LoginButton(
+                  height: 50,
+                  width: 200,
+                  buttoncolor: const Color(0xff2865DC),
+                  radius: 30,
+                  onPressed: () {
+                    checkValues();
+                  },
+                  child: Text(
+                    "Submit",
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
