@@ -1,17 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/screens/selectusertochat_page.dart';
-import 'package:chat_app/screens/userinfo_page.dart';
-import 'package:chat_app/service/firebase_service.dart';
-import 'package:chat_app/widgets/chats_homepage.dart';
-import 'package:chat_app/widgets/profile_image_homepage.dart';
+import 'package:class_mates/models/usersmodel.dart';
+import 'package:class_mates/screens/all_users_screen.dart';
+import 'package:class_mates/screens/selectusertochat_page.dart';
+import 'package:class_mates/screens/userinfo_page.dart';
+import 'package:class_mates/service/firebase_service.dart';
+import 'package:class_mates/widgets/chats_homepage.dart';
+import 'package:class_mates/widgets/profile_image_homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'all_users_screen.dart';
 import 'login_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 1, vsync: this);
     super.initState();
   }
 
@@ -60,7 +60,13 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                      return UserInfoPage(
+                        chatUser: user!,
+                      );
+                    })));
+                  },
                   leading: const Icon(
                     Icons.settings,
                     color: Colors.white,
@@ -174,7 +180,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   })));
                 },
                 icon: const Icon(
-                  Icons.search,
+                  Icons.people_alt,
+                  size: 36,
+                  color: Color(0xff000000),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 30,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                    return UserInfoPage(
+                      chatUser: user!,
+                    );
+                  })));
+                },
+                icon: const Icon(
+                  Icons.manage_accounts,
                   size: 36,
                   color: Color(0xff000000),
                 ),
@@ -189,7 +217,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(30),
-                customBorder: const CircleBorder(side: BorderSide(width: 40)),
+                customBorder: const CircleBorder(
+                  side: BorderSide(width: 40),
+                ),
                 onTap: (() {
                   moreOptions();
                 }),
@@ -253,40 +283,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                     ),
                   ),
                 ),
-                Tab(
-                  height: 44,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      // color: Color(0xffFFFFFF),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Stories",
-                        style: GoogleFonts.inter(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Tab(
-                  height: 44,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      // color: Color(0xffFFFFFF),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Calls",
-                        style: GoogleFonts.inter(
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -295,12 +291,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               controller: _tabController,
               children: [
                 ChatsHomePage(chatUser: widget.chatUser),
-                const Center(
-                  child: Text("stories"),
-                ),
-                const Center(
-                  child: Text("calls"),
-                ),
               ],
             ),
           )

@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>653162562389-7ctthls8387kfh2nd6hchdhh3e2dirjm.apps.googleusercontent.com</string>
+	<string>951816520702-0i21424ojf2a0mdpaf06td15qsh0jeus.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.653162562389-7ctthls8387kfh2nd6hchdhh3e2dirjm</string>
+	<string>com.googleusercontent.apps.951816520702-0i21424ojf2a0mdpaf06td15qsh0jeus</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>653162562389-ibei0vt09nisvvt0pq00pa11b2372qrk.apps.googleusercontent.com</string>
+	<string>951816520702-lkuhceju1khshd3h8dlkesd5sg3duji5.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCrTd4H8xllknYDODJo1j-2EkhR8TlvOA4</string>
+	<string>AIzaSyB_ZHBjex5dJZxI62obwdRtEzKDe0RS2yw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>653162562389</string>
+	<string>951816520702</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.chatApp</string>
+	<string>com.example.classapp</string>
 	<key>PROJECT_ID</key>
-	<string>chat-app-9ce0c</string>
+	<string>classroomapp-8eb0d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>chat-app-9ce0c.appspot.com</string>
+	<string>classroomapp-8eb0d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:653162562389:ios:58eb4c477596f1763765dc</string>
-	<key>DATABASE_URL</key>
-	<string>https://chat-app-9ce0c-default-rtdb.firebaseio.com</string>
+	<string>1:951816520702:ios:afdc7ae7d4201fa608f6af</string>
 </dict>
 </plist>

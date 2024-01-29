@@ -2,19 +2,19 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:chat_app/main.dart';
-import 'package:chat_app/models/chatroommodel.dart';
-import 'package:chat_app/models/messagemodel.dart';
-import 'package:chat_app/screens/camera_page.dart';
-import 'package:chat_app/widgets/previewimage_chatpage.dart';
-import 'package:chat_app/widgets/showmessage.dart';
+import 'package:class_mates/main.dart';
+import 'package:class_mates/models/chatroommodel.dart';
+import 'package:class_mates/models/messagemodel.dart';
+import 'package:class_mates/screens/camera_page.dart';
+import 'package:class_mates/widgets/previewimage_chatpage.dart';
+import 'package:class_mates/widgets/showmessage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:chat_app/models/chatgroupmodel.dart';
-import 'package:chat_app/models/usersmodel.dart';
+import 'package:class_mates/models/chatgroupmodel.dart';
+import 'package:class_mates/models/usersmodel.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 

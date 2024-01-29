@@ -2,13 +2,13 @@
 
 import 'dart:developer';
 import 'dart:io';
-import 'package:chat_app/widgets/about_userdata.dart';
-import 'package:chat_app/widgets/email_userdata.dart';
-import 'package:chat_app/widgets/name_userdata.dart';
-import 'package:chat_app/widgets/phone_userdata.dart';
-import 'package:chat_app/widgets/profile_image_homepage.dart';
-import 'package:chat_app/widgets/userinfo_popup.dart';
-import 'package:chat_app/widgets/viewuserprofilepic.dart';
+import 'package:class_mates/widgets/about_userdata.dart';
+import 'package:class_mates/widgets/email_userdata.dart';
+import 'package:class_mates/widgets/name_userdata.dart';
+import 'package:class_mates/widgets/phone_userdata.dart';
+import 'package:class_mates/widgets/profile_image_homepage.dart';
+import 'package:class_mates/widgets/userinfo_popup.dart';
+import 'package:class_mates/widgets/viewuserprofilepic.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

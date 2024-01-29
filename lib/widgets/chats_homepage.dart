@@ -1,14 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
-import 'dart:io';
-import 'package:chat_app/models/chatroommodel.dart';
-import 'package:chat_app/screens/chat_page.dart';
-import 'package:chat_app/service/firebase_service.dart';
+
+import 'package:class_mates/models/chatroommodel.dart';
+import 'package:class_mates/models/usersmodel.dart';
+import 'package:class_mates/screens/chat_page.dart';
+import 'package:class_mates/service/firebase_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ChatsHomePage extends StatefulWidget {
@@ -51,16 +50,13 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
               return ListView.builder(
                 itemCount: chatroomsnapshot.docs.length,
                 itemBuilder: ((context, index) {
-                  ChatRoomModel chatRoomModel = ChatRoomModel.fromJson(
-                      chatroomsnapshot.docs[index].data()
-                          as Map<String, dynamic>);
-                  Map<String, dynamic> participants =
-                      chatRoomModel.participants!;
+                  ChatRoomModel chatRoomModel =
+                      ChatRoomModel.fromJson(chatroomsnapshot.docs[index].data() as Map<String, dynamic>);
+                  Map<String, dynamic> participants = chatRoomModel.participants!;
                   List<String> participantkeys = participants.keys.toList();
                   participantkeys.remove(user!.uid);
                   return FutureBuilder(
-                    future:
-                        FirebaseService.getUserModelbyId(participantkeys[0]),
+                    future: FirebaseService.getUserModelbyId(participantkeys[0]),
                     builder: (context, userdata) {
                       if (userdata.connectionState == ConnectionState.done) {
                         if (userdata.data != null) {
@@ -96,14 +92,13 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
                               title: Text(
                                 targetuser.username.toString(),
                               ),
-                              subtitle: (chatRoomModel.lastmessage!.contains(
-                                      'https://firebasestorage.googleapis.com'))
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
+                              subtitle: (chatRoomModel.lastmessage!.contains('https://firebasestorage.googleapis.com'))
+                                  ? const Padding(
+                                      padding: EdgeInsets.only(
                                         top: 5,
                                       ),
                                       child: Row(
-                                        children: const [
+                                        children: [
                                           Icon(
                                             Icons.image,
                                             size: 20,
@@ -121,8 +116,7 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
                                         ],
                                       ))
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
                                           chatRoomModel.lastmessage.toString(),
@@ -130,8 +124,7 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
                                         Text(
                                           (chatRoomModel.lastmsgtime == null)
                                               ? ""
-                                              : DateFormat.jm().format(
-                                                  chatRoomModel.lastmsgtime!),
+                                              : DateFormat.jm().format(chatRoomModel.lastmsgtime!),
                                         ),
                                       ],
                                     ),
@@ -142,7 +135,7 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
                             ),
                           );
                         } else {
-                          return Text("User data is null");
+                          return const Text("User data is null");
                         }
                       } else {
                         return const SizedBox(
@@ -168,14 +161,14 @@ class _ChatsHomePageState extends State<ChatsHomePage> {
             } else if (snapshot.hasError) {
               return Text(snapshot.error.toString());
             } else {
-              return Center(
+              return const Center(
                 child: Text("No Chat found"),
               );
             }
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Connection State Waiting");
+            return const Text("Connection State Waiting");
           } else {
-            return Center(child: Text("Error: Check Internet Connection"));
+            return const Center(child: Text("Error: Check Internet Connection"));
           }
         }));
   }

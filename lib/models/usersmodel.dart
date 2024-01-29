@@ -15,8 +15,11 @@ class ChatUser {
   String? profilepic;
 
   String? about;
+
   String? techerName;
-  String? hobbies;
+
+  String? otherBooks;
+
   String? favBooks;
 
   ChatUser({
@@ -24,11 +27,14 @@ class ChatUser {
     this.uid,
     this.profilepic,
     this.username,
-    this.techerName,
     this.phone,
     this.about,
+    this.techerName,
+    this.otherBooks,
+    this.favBooks,
   });
 
   factory ChatUser.fromJson(Map<String, dynamic> json) => _$ChatUserFromJson(json);
+
   Map<String, dynamic> toJson() => _$ChatUserToJson(this);
 }

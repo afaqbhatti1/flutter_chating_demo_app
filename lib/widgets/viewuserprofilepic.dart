@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:chat_app/widgets/profile_image_homepage.dart';
+import 'package:class_mates/widgets/profile_image_homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:chat_app/models/usersmodel.dart';
+import 'package:class_mates/models/usersmodel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ViewUserProfilePic extends StatefulWidget {

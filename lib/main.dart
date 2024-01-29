@@ -1,22 +1,18 @@
-import 'package:chat_app/screens/complete_profile_page.dart';
-import 'package:chat_app/screens/home_page.dart';
-import 'package:chat_app/screens/login_page.dart';
-import 'package:chat_app/screens/splashhome_page.dart';
-import 'package:chat_app/screens/splashlogin_page.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:class_mates/screens/splashhome_page.dart';
+import 'package:class_mates/screens/splashlogin_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:uuid/uuid.dart';
-import 'firebase_options.dart';
 
-var uuid = Uuid();
+var uuid = const Uuid();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
   runApp(const MyApp());
 }
 
@@ -40,9 +36,9 @@ AuthStateChanges() {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, snapshot) {
         if (snapshot.hasData) {
-          return SplashPageHome();
+          return const SplashPageHome();
         } else {
-          return SplashLoginPage();
+          return const SplashLoginPage();
         }
       });
 }

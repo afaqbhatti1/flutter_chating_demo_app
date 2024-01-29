@@ -1,13 +1,11 @@
-import 'package:chat_app/screens/complete_profile_phonelogin_page.dart';
-import 'package:chat_app/screens/home_page.dart';
-import 'package:chat_app/widgets/login_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:class_mates/screens/complete_profile_phonelogin_page.dart';
+import 'package:class_mates/screens/home_page.dart';
+import 'package:class_mates/widgets/login_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../models/usersmodel.dart';
 
@@ -60,7 +58,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Enter your OTP'),
+            title: const Text('Enter your OTP'),
             content: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
@@ -76,15 +74,13 @@ class _PhoneLoginState extends State<PhoneLogin> {
                 },
               ),
             ),
-            contentPadding: EdgeInsets.all(10.0),
+            contentPadding: const EdgeInsets.all(10.0),
             actions: <Widget>[
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   if (otp == "") {
-                    Fluttertoast.showToast(
-                        msg: "OTP cannot be empty",
-                        backgroundColor: Colors.black);
+                    Fluttertoast.showToast(msg: "OTP cannot be empty", backgroundColor: Colors.black);
                   } else {
                     signIn(otp);
                   }
@@ -127,11 +123,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
               profilepic: "",
               phone: phoneNumber,
             );
-            await FirebaseFirestore.instance
-                .collection("Users")
-                .doc(uid)
-                .set(newUser.toJson())
-                .then((value) {
+            await FirebaseFirestore.instance.collection("Users").doc(uid).set(newUser.toJson()).then((value) {
               Fluttertoast.showToast(
                 msg: "Account Created Succesfully",
                 backgroundColor: Colors.black,
@@ -146,7 +138,7 @@ class _PhoneLoginState extends State<PhoneLogin> {
             });
           } else {
             Navigator.push(context, MaterialPageRoute(builder: ((context) {
-              return HomePage();
+              return const HomePage();
             })));
           }
         },
@@ -155,7 +147,6 @@ class _PhoneLoginState extends State<PhoneLogin> {
       // if(docRef.snapshots().isEmpty == true){
 
       // }
-
     }
   }
 
@@ -184,8 +175,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
               children: [
                 Center(
                   child: Image.asset(
-                    "assets/splash-logo.png",
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    "assets/logo_app.png",
+                    width: MediaQuery.of(context).size.width * 0.7,
                   ),
                 ),
                 const SizedBox(
@@ -223,6 +214,8 @@ class _PhoneLoginState extends State<PhoneLogin> {
                       verifyPhoneNumber(context);
                     },
                     width: MediaQuery.of(context).size.width - 150,
+                    buttoncolor: const Color(0xff2958DC),
+                    radius: 24,
                     child: Text(
                       "Send OTP",
                       style: GoogleFonts.inter(
@@ -230,20 +223,16 @@ class _PhoneLoginState extends State<PhoneLogin> {
                         fontSize: 16,
                       ),
                     ),
-                    buttoncolor: Color(0xff2958DC),
-                    radius: 24,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Text(
                   (authStatus == "") ? "" : authStatus!,
                   style: TextStyle(
-                      color: authStatus!.contains("fail") ||
-                              authStatus!.contains("TIMEOUT")
-                          ? Colors.red
-                          : Colors.green),
+                      color:
+                          authStatus!.contains("fail") || authStatus!.contains("TIMEOUT") ? Colors.red : Colors.green),
                 )
               ],
             ),

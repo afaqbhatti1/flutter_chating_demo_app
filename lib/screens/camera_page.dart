@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-import 'package:chat_app/widgets/previewimage_chatpage.dart';
+import 'package:class_mates/widgets/previewimage_chatpage.dart';
 
 import '../models/chatroommodel.dart';
 import '../models/usersmodel.dart';

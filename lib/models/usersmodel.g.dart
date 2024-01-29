@@ -13,6 +13,9 @@ ChatUser _$ChatUserFromJson(Map<String, dynamic> json) => ChatUser(
       username: json['username'] as String?,
       phone: json['phone'] as String?,
       about: json['about'] as String?,
+      techerName: json['teacherName'] as String?,
+      otherBooks: json['otherBooks'] as String?,
+      favBooks: json['favBooks'] as String?,
     );
 
 Map<String, dynamic> _$ChatUserToJson(ChatUser instance) => <String, dynamic>{
@@ -22,4 +25,7 @@ Map<String, dynamic> _$ChatUserToJson(ChatUser instance) => <String, dynamic>{
       'phone': instance.phone,
       'profilepic': instance.profilepic,
       'about': instance.about,
+      'teacherName': instance.techerName,
+      'otherBooks': instance.otherBooks,
+      'favBooks': instance.favBooks,
     };

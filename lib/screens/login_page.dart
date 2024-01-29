@@ -1,18 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-import 'dart:developer';
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/screens/phone_login_page.dart';
-import 'package:chat_app/service/firebase_service.dart';
-import 'package:chat_app/screens/signup_page.dart';
+import 'package:class_mates/models/usersmodel.dart';
+import 'package:class_mates/screens/signup_page.dart';
+import 'package:class_mates/widgets/custom_text_Feild.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../widgets/login_button.dart';
 import 'home_page.dart';
 
@@ -26,6 +24,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   String? _errorMessage;
 
@@ -34,11 +33,11 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Error"),
+            title: const Text("Error"),
             content: Text(message),
             actions: [
               TextButton(
-                child: Text("Ok"),
+                child: const Text("Ok"),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -81,8 +80,7 @@ class _LoginPageState extends State<LoginPage> {
   void login(String email, String password) async {
     UserCredential? credential;
     try {
-      credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+      credential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (exception) {
       Fluttertoast.showToast(
         msg: exception.code.toString(),
@@ -93,10 +91,8 @@ class _LoginPageState extends State<LoginPage> {
 
     if (credential != null) {
       String uid = credential.user!.uid;
-      DocumentSnapshot userData =
-          await FirebaseFirestore.instance.collection("Users").doc(uid).get();
-      ChatUser loginUser =
-          ChatUser.fromJson(userData.data() as Map<String, dynamic>);
+      DocumentSnapshot userData = await FirebaseFirestore.instance.collection("Users").doc(uid).get();
+      ChatUser loginUser = ChatUser.fromJson(userData.data() as Map<String, dynamic>);
       EasyLoading.showInfo(
         "Logging In",
         dismissOnTap: true,
@@ -132,170 +128,199 @@ class _LoginPageState extends State<LoginPage> {
               right: 15,
               top: 100,
             ),
-            child: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/splash-logo.png",
-                          width: MediaQuery.of(context).size.width * 0.4,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 45,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      controller: emailcontroller,
-                      decoration: const InputDecoration(
-                        labelText: "Email",
+            child: Form(
+              key: formKey,
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/logo_app.png",
+                            width: MediaQuery.of(context).size.width * 0.7,
+                          ),
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        right: 203,
-                        left: 5,
-                        bottom: 5,
-                        top: 5,
+                      const SizedBox(
+                        height: 45,
                       ),
-                      child: Text(
-                        (_errorMessage == null) ? "" : _errorMessage.toString(),
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                      controller: passwordcontroller,
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        labelText: "Password",
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 35,
-                    ),
-                    LoginButton(
-                      height: 45,
-                      width: MediaQuery.of(context).size.width - 150,
-                      buttoncolor: Color(0xff2865DC),
-                      radius: 10,
-                      onPressed: () {
-                        String val = emailcontroller.text.trim();
-
-                        validateEmail(val);
-
-                        checkValues();
-                        EasyLoading.showProgress(0.5, status: "Logging In");
-                      },
-                      child: Text(
-                        "Log in",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    LoginButton(
-                      height: 45,
-                      width: MediaQuery.of(context).size.width - 150,
-                      child: Text(
-                        "Login with Phone",
-                        style: GoogleFonts.poppins(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
-                      buttoncolor: Color(0xff2865DC),
-                      radius: 10,
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: ((context) {
-                          return PhoneLogin();
-                        })));
-                      },
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    LoginButton(
-                      height: 45,
-                      width: MediaQuery.of(context).size.width - 150,
-                      buttoncolor: Color(0xff2865DC),
-                      radius: 10,
-                      onPressed: () async {
-                        FirebaseService service = FirebaseService();
-                        try {
-                          ChatUser chatUser;
-                          chatUser = await service.signInWithGoogle();
-
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage(
-                                        chatUser: chatUser,
-                                      )));
-                        } catch (e) {
-                          if (e is FirebaseAuthException) {
-                            print(e.message);
-                            log(e.message!);
-                            showMessage(e.message!);
-                          } else if (e is PlatformException) {
-                            print(e.message);
-                            log(e.details);
+                      // TextFormField(
+                      //   keyboardType: TextInputType.emailAddress,
+                      //   textInputAction: TextInputAction.next,
+                      //   controller: emailcontroller,
+                      //   decoration: const InputDecoration(
+                      //     labelText: "Email",
+                      //   ),
+                      // ),
+                      CustomTextField(
+                        controller: emailcontroller,
+                        hintText: "Email",
+                        validator: (value) {
+                          String pattern = r'^[\w\.-]+@[a-zA-Z][\w-]*\.[a-zA-Z]{2,}$';
+                          final regex = RegExp(pattern);
+                          if (value?.isEmpty ?? true) {
+                            return "Email is required";
+                          } else if (!regex.hasMatch(value ?? '')) {
+                            return 'Please enter a valid email address';
+                          } else {
+                            return null;
                           }
-                        }
-                      },
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(
-                                5,
-                              ),
-                              height: 38,
-                              width: 38,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Image.asset(
-                                "assets/google.png",
-                                height: 40,
-                                width: 30,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              "Sign in with Google",
-                              style: GoogleFonts.poppins(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ]),
-                    ),
-                  ],
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          right: 203,
+                          left: 5,
+                          bottom: 5,
+                          top: 5,
+                        ),
+                        child: Text(
+                          (_errorMessage == null) ? "" : _errorMessage.toString(),
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      // TextFormField(
+                      //   keyboardType: TextInputType.visiblePassword,
+                      //   textInputAction: TextInputAction.done,
+                      //   controller: passwordcontroller,
+                      //   obscureText: true,
+                      //   decoration: const InputDecoration(
+                      //     labelText: "Password",
+                      //   ),
+                      // ),
+                      CustomTextField(
+                        controller: passwordcontroller,
+                        hintText: "Password",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter Password';
+                          }
+                          return null;
+                        },
+                        isPassword: true,
+                      ),
+                      const SizedBox(
+                        height: 35,
+                      ),
+                      LoginButton(
+                        height: 45,
+                        width: MediaQuery.of(context).size.width - 150,
+                        buttoncolor: const Color(0xff2865DC),
+                        radius: 10,
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            String val = emailcontroller.text.trim();
+
+                            validateEmail(val);
+
+                            checkValues();
+                          }
+                          // EasyLoading.showProgress(0.5, status: "Logging In");
+                        },
+                        child: Text(
+                          "Log in",
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      // LoginButton(
+                      //   height: 45,
+                      //   width: MediaQuery.of(context).size.width - 150,
+                      //   buttoncolor: const Color(0xff2865DC),
+                      //   radius: 10,
+                      //   onPressed: () {
+                      //     Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                      //       return const PhoneLogin();
+                      //     })));
+                      //   },
+                      //   child: Text(
+                      //     "Login with Phone",
+                      //     style: GoogleFonts.poppins(
+                      //       fontSize: 16,
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 15,
+                      // ),
+                      // LoginButton(
+                      //   height: 45,
+                      //   width: MediaQuery.of(context).size.width - 150,
+                      //   buttoncolor: const Color(0xff2865DC),
+                      //   radius: 10,
+                      //   onPressed: () async {
+                      //     FirebaseService service = FirebaseService();
+                      //     try {
+                      //       ChatUser chatUser;
+                      //       chatUser = await service.signInWithGoogle();
+
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //             builder: (context) => HomePage(
+                      //               chatUser: chatUser,
+                      //             ),
+                      //           ));
+                      //     } catch (e) {
+                      //       if (e is FirebaseAuthException) {
+                      //         print(e.message);
+                      //         log(e.message!);
+                      //         showMessage(e.message!);
+                      //       } else if (e is PlatformException) {
+                      //         print(e.message);
+                      //         log(e.details);
+                      //       }
+                      //     }
+                      //   },
+                      //   child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      //     const SizedBox(
+                      //       width: 8,
+                      //     ),
+                      //     Container(
+                      //       padding: const EdgeInsets.all(
+                      //         5,
+                      //       ),
+                      //       height: 38,
+                      //       width: 38,
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.white,
+                      //         borderRadius: BorderRadius.circular(25),
+                      //       ),
+                      //       child: Image.asset(
+                      //         "assets/google.png",
+                      //         height: 40,
+                      //         width: 30,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(
+                      //       width: 15,
+                      //     ),
+                      //     Text(
+                      //       "Sign in with Google",
+                      //       style: GoogleFonts.poppins(
+                      //         fontSize: 16,
+                      //         color: Colors.white,
+                      //       ),
+                      //     ),
+                      //   ]),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -314,10 +339,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SignupPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
               },
               child: Text(
                 "Sign up",

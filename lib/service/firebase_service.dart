@@ -13,17 +13,21 @@ class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  
 
   Future<ChatUser> signInWithGoogle() async {
     try {
+      log("signInWithGoogle");
       final GoogleSignInAccount? googleSignInAccount = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
+
       final UserCredential authResult = await _auth.signInWithCredential(credential);
       final User user = authResult.user!;
+      log("authResult  ??????  $authResult");
       EasyLoading.showInfo(
         "Logging In",
         dismissOnTap: true,

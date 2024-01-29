@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/screens/home_page.dart';
-import 'package:chat_app/widgets/login_button.dart';
+import 'package:class_mates/models/usersmodel.dart';
+import 'package:class_mates/screens/home_page.dart';
+import 'package:class_mates/widgets/login_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -66,20 +66,24 @@ class _CompleteProfileState extends State<CompleteProfile> {
   TextEditingController fullnamecontroller = TextEditingController();
   TextEditingController aboutcontroller = TextEditingController();
   TextEditingController teacherNamecontroller = TextEditingController();
-  TextEditingController hobbiescontroller = TextEditingController();
+  TextEditingController otherBookscontroller = TextEditingController();
   TextEditingController favBookscontroller = TextEditingController();
 
   void checkValues() {
     String fullname = fullnamecontroller.text.trim();
     String about = aboutcontroller.text.trim();
     String teacherName = aboutcontroller.text.trim();
-    String hobbies = hobbiescontroller.text.trim();
+    String otherBooks = otherBookscontroller.text.trim();
     String favBooks = favBookscontroller.text.trim();
 
-    if (imagefile != null || fullname != "" || about != "") {
-      uploadData(fullname, about, teacherName, hobbies, favBooks);
+    if (imagefile != null && fullname != "" && about != "" && teacherName != "" && otherBooks != "" && favBooks != "") {
+      uploadData(fullname, about, teacherName, otherBooks, favBooks);
     } else {
-      print("Please Fill all Values");
+      Fluttertoast.showToast(
+        msg: "Please Fill all Values with Profile Image",
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
     }
   }
 
@@ -87,7 +91,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     String fullname,
     String about,
     String teacherName,
-    String hobbies,
+    String otherBooks,
     String favBooks,
   ) async {
     UploadTask uploadTask =
@@ -101,7 +105,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
     widget.chatUser.username = fullname;
     widget.chatUser.about = about;
     widget.chatUser.techerName = teacherName;
-    widget.chatUser.hobbies = hobbies;
+    widget.chatUser.otherBooks = otherBooks;
     widget.chatUser.favBooks = favBooks;
 
     await FirebaseFirestore.instance
@@ -115,12 +119,17 @@ class _CompleteProfileState extends State<CompleteProfile> {
           backgroundColor: Colors.black,
           textColor: Colors.white,
         );
-        Navigator.push(context, MaterialPageRoute(builder: ((context) {
-          return HomePage(
-            chatUser: widget.chatUser,
-            firestoreuser: widget.firestoreuser,
-          );
-        })));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) {
+              return HomePage(
+                chatUser: widget.chatUser,
+                firestoreuser: widget.firestoreuser,
+              );
+            }),
+          ),
+        );
       },
     );
   }
@@ -204,18 +213,18 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   height: 12,
                 ),
                 TextField(
-                  controller: hobbiescontroller,
+                  controller: favBookscontroller,
                   decoration: const InputDecoration(
-                    labelText: "Hobbies",
+                    labelText: "Favourite Books ",
                   ),
                 ),
                 const SizedBox(
                   height: 12,
                 ),
                 TextField(
-                  controller: favBookscontroller,
+                  controller: otherBookscontroller,
                   decoration: const InputDecoration(
-                    labelText: "Favourite Books ",
+                    labelText: "otherBooks",
                   ),
                 ),
                 const SizedBox(

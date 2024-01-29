@@ -7,9 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/main.dart';
-import 'package:chat_app/models/messagemodel.dart';
-import 'package:chat_app/screens/chat_page.dart';
+import 'package:class_mates/main.dart';
+import 'package:class_mates/models/messagemodel.dart';
+import 'package:class_mates/screens/chat_page.dart';
 
 import '../models/chatroommodel.dart';
 import '../models/usersmodel.dart';

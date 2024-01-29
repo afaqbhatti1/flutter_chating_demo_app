@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:chat_app/models/usersmodel.dart';
-import 'package:chat_app/widgets/listusers_addbutton.dart';
+import 'package:class_mates/models/usersmodel.dart';
+import 'package:class_mates/widgets/listusers_addbutton.dart';
 
 class SelectUserToChat extends StatefulWidget {
   final User? chatUser;
